@@ -10,7 +10,7 @@ abstract class MyDatabase:RoomDatabase() {
     companion object{
         lateinit var INSTANCE : MyDatabase
         fun getInstance(context: Context): MyDatabase {
-            if(!Companion::INSTANCE.isInitialized){
+            if(!::INSTANCE.isInitialized){
                 INSTANCE = Room.databaseBuilder(
                     context,
                     MyDatabase::class.java,"database-name"
@@ -18,7 +18,6 @@ abstract class MyDatabase:RoomDatabase() {
 
                 )
                     .allowMainThreadQueries()
-                    .createFromAsset("database.db")
                     .build()
             }
             return INSTANCE

@@ -10,9 +10,13 @@ import android.widget.ImageView
 import android.widget.ImageView.VISIBLE
 import android.widget.TextView
 import android.widget.Toast
+import com.example.matematikoyin.data.MyDao
+import com.example.matematikoyin.data.MyDatabase
+import com.example.matematikoyin.data.User
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.activity_main3.*
+import kotlin.math.max
 import kotlin.random.Random
 
 var jami = 0
@@ -30,15 +34,20 @@ class MainActivity2 : AppCompatActivity() {
         const val NAME = "name"
     }
 
+    var meAdapter  =  Adapter()
+    lateinit var dao:MyDao
+    var esap = true
+    var maxOf =  0
+
+
     var chalgitish =
         arrayListOf(-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    val timer = object : CountDownTimer(10000, 1000) {
+    val timer = object : CountDownTimer(20000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
             sec.text = (millisUntilFinished / 1000).toString() + ""
         }
-
         override fun onFinish() {
-
+            res()
         }
     }.start()
 
@@ -116,6 +125,34 @@ class MainActivity2 : AppCompatActivity() {
             finishAffinity()
         }else {
             Asos()
+        }
+    }
+    fun res (){
+        var cas = intent.getStringExtra(MainActivity.NAME)
+        dao = MyDatabase.getInstance(this).usernameDao()
+        for (i in 0 until meAdapter.models.size) {
+            if (dao.getAllUsername()[i].username == cas  && "$maxOf" < dao.getAllUsername()[i].score.toString()) {
+                dao.update(
+                    User(
+                        username = dao.getAllUsername()[i].username,
+                                score = maxOf
+                    )
+                )
+                maxOf = dao.getAllUsername()[i].score
+                esap = false
+            } else if (dao.getAllUsername()[i].username == ismFamilya.text && maxOf > text1.text.toString()
+                    .toInt()
+            ) {
+                esap = false
+            }
+            if (esap) {
+                dao.insert(
+                    User(
+                        username = ismFamilya.text.toString(),
+                        score = text1.text.toString().toInt()
+                    )
+                )
+            }
         }
     }
 }

@@ -1,18 +1,27 @@
 package com.example.matematikoyin
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.matematikoyin.data.User
+import kotlinx.android.synthetic.main.activity_main4.view.*
 
-class Adapter : RecyclerView.Adapter<LIstViewHolder>(){
-    var models : MutableList<User> = mutableListOf()
+class Adapter : RecyclerView.Adapter<Adapter.LIstViewHolder>(){
+    var models : List<User> = mutableListOf()
     set(value) {
         field = value
         notifyDataSetChanged()
     }
+
+    inner class LIstViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        fun populateModel(user: User){
+            itemView.tvView.text = user.username
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LIstViewHolder {
-        var view = LayoutInflater.from(parent.context).inflate(R.layout.activity_main4,parent,false)
+        var view = LayoutInflater.from(parent.context).inflate(R.layout.reyting_item,parent,false)
         return LIstViewHolder(view)
     }
 

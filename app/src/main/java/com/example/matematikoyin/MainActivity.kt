@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
                 var konvert = Intent(this, MainActivity2::class.java)
                 konvert.putExtra(NAME, "${tekst1.text}")
                 startActivity(konvert)
+                finishAffinity()
             }
         }
     }
