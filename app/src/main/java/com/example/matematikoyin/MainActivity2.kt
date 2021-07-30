@@ -31,32 +31,35 @@ class MainActivity2 : AppCompatActivity() {
     companion object {
         const val RIGHTANSWERS = "rightAnswers"
         const val WRONGANSWERS = "wrongAnswers"
-        const val NAME = "name"
+        const val NAME = ""
+
     }
-
-    var meAdapter  =  Adapter()
-    lateinit var dao:MyDao
+    private var name123: String = ""
+    var meAdapter = Adapter()
+    lateinit var dao: MyDao
     var esap = true
-    var maxOf =  0
-
+    var maxOf = 0
 
     var chalgitish =
         arrayListOf(-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    val timer = object : CountDownTimer(20000, 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            sec.text = (millisUntilFinished / 1000).toString() + ""
-        }
-        override fun onFinish() {
-            res()
-        }
-    }.start()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
+        name123 = intent.getStringExtra("name").toString()
         Asos()
         timer.start()
     }
+
+    val timer = object : CountDownTimer(10000, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            sec.text = (millisUntilFinished / 1000).toString() + ""
+        }
+
+        override fun onFinish() {
+            Qoshimcha()
+        }
+    }.start()
 
     fun Asos() {
         var a = Random.nextInt(1, 100)
@@ -100,59 +103,62 @@ class MainActivity2 : AppCompatActivity() {
         massiv.clear()
     }
 
+//    fun adToDb(user: User) {
+//        dao.insert(user)
+//        setData()
+//    }
+//
+//    fun result() {
+//
+//        var sort = dao.getPersonsSortByDescScore()
+//        for (i in sort.indices) {
+//            if ((sort[i].username == sort[i].username) && sort[i].score < right) {
+//                sort[i].score = right
+//                dao.update(sort[i])
+//                goToResults()
+//                return
+//            } else if ((sort[i].username == sort[i].username) && sort[i].score >= right) {
+//                goToResults()
+//                return
+//            }
+//        }
+//        var user = User(username = NAME, score = right)
+//        adToDb(user)
+//        goToResults()
+//    }
+
+//    fun setData() {
+//        dao = MyDatabase.getInstance(this).usernameDao()
+//        meAdapter.models = dao.getPersonsSortByDescScore()
+//    }
+//
+//
+//    fun goToResults() {
+//        val xat = Intent(this, MainActivity4::class.java)
+//        startActivity(xat)
+//        finish()
+//    }
+
     fun buttonOnClick(view: View) {
         if ((view as Button).text == jami.toString()) {
             right++
             sec2.text = "To'g'ri : $right"
-            Qoshimcha()
+            Asos()
         } else {
             wrong++
             sec3.text = "Xatolar : $wrong"
-            Qoshimcha()
+            Asos()
         }
     }
 
     fun Qoshimcha() {
-        var cas = intent.getStringExtra(MainActivity.NAME)
-        if (sec.text == "0") {
-            val xat = Intent(this, MainActivity3::class.java)
-            xat.putExtra(RIGHTANSWERS, right)
-            xat.putExtra(WRONGANSWERS, wrong)
-            xat.putExtra(NAME, cas)
-            startActivity(xat)
-            right = 0
-            wrong = 0
-            finishAffinity()
-        }else {
-            Asos()
-        }
-    }
-    fun res (){
-        var cas = intent.getStringExtra(MainActivity.NAME)
-        dao = MyDatabase.getInstance(this).usernameDao()
-        for (i in 0 until meAdapter.models.size) {
-            if (dao.getAllUsername()[i].username == cas  && "$maxOf" < dao.getAllUsername()[i].score.toString()) {
-                dao.update(
-                    User(
-                        username = dao.getAllUsername()[i].username,
-                                score = maxOf
-                    )
-                )
-                maxOf = dao.getAllUsername()[i].score
-                esap = false
-            } else if (dao.getAllUsername()[i].username == ismFamilya.text && maxOf > text1.text.toString()
-                    .toInt()
-            ) {
-                esap = false
-            }
-            if (esap) {
-                dao.insert(
-                    User(
-                        username = ismFamilya.text.toString(),
-                        score = text1.text.toString().toInt()
-                    )
-                )
-            }
-        }
+        val xat = Intent(this, MainActivity3::class.java)
+        xat.putExtra(RIGHTANSWERS, right)
+        xat.putExtra(WRONGANSWERS, wrong)
+        xat.putExtra("name", name123)
+        startActivity(xat)
+        right = 0
+        wrong = 0
+        finish()
     }
 }

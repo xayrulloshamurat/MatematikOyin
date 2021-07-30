@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
                 tekst1.error = "Ismingizni kiritishingiz shart"
             } else {
                 var konvert = Intent(this, MainActivity2::class.java)
-                konvert.putExtra(NAME, "${tekst1.text}")
+                konvert.putExtra("name", tekst1.text)
                 startActivity(konvert)
                 finishAffinity()
             }

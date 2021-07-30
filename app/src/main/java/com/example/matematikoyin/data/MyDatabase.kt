@@ -14,10 +14,9 @@ abstract class MyDatabase:RoomDatabase() {
                 INSTANCE = Room.databaseBuilder(
                     context,
                     MyDatabase::class.java,"database-name"
-
-
                 )
                     .allowMainThreadQueries()
+                    .createFromAsset("database-db")
                     .build()
             }
             return INSTANCE

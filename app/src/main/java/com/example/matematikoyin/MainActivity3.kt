@@ -12,19 +12,43 @@ import kotlinx.android.synthetic.main.activity_main3.*
 
 class MainActivity3 : AppCompatActivity() {
     lateinit var dao: MyDao
-    var maxOf = 0
-    var esap = true
+    var trueA = 0
+    var falseA = 0
+    var name = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
-        var oxiri = intent.getIntExtra(MainActivity2.RIGHTANSWERS, 0)
-        var oxiri1 = intent.getIntExtra(MainActivity2.WRONGANSWERS, 0)
-        var oxiri3 = intent.getStringExtra(MainActivity2.NAME)
-        ismFamilya.text = "NAME: $oxiri3"
-        text1.text = "TRUE: $oxiri "
-        text2.text = " WRONG: $oxiri1 "
+        dao = MyDatabase.getInstance(this).usernameDao()
+        trueA = intent.getIntExtra(MainActivity2.RIGHTANSWERS, 0)
+        falseA = intent.getIntExtra(MainActivity2.WRONGANSWERS, 0)
+        name = intent.getStringExtra("name").toString()
+        ismFamilya.text = "NAME : $name"
+        text1.text = "TRUE: $trueA "
+        text2.text = " WRONG: $falseA "
 
-        restart.setOnClickListener {
+        val sort: MutableList<User> = mutableListOf()
+        sort.addAll(dao.getAllUsername())
+
+        if (sort.isEmpty()) {
+            dao.insert(User(username = name, score = trueA))
+
+        } else {
+            var schet = 0
+            for (i in 0 until sort.size) {
+                if (name == sort[i].username) {
+                    schet = 1
+                    if (trueA > sort[i].score) {
+                        sort[i].score = trueA
+                        dao.delete(sort[i])
+                        dao.insert(sort[i])
+
+                    }
+                }
+            }
+            if (schet == 0) dao.insert(User(username = name, score = trueA))
+        }
+    restart.setOnClickListener {
             var xat = Intent(this, MainActivity::class.java)
             startActivity(xat)
             finish()
@@ -33,7 +57,6 @@ class MainActivity3 : AppCompatActivity() {
             var xat = Intent(this, MainActivity4::class.java)
             startActivity(xat)
             finish()
-
         }
     }
 }

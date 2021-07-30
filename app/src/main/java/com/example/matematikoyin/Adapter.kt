@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.matematikoyin.data.User
 import kotlinx.android.synthetic.main.activity_main4.view.*
+import kotlinx.android.synthetic.main.reyting_item.view.*
 
 class Adapter : RecyclerView.Adapter<Adapter.LIstViewHolder>(){
     var models : List<User> = mutableListOf()
@@ -16,7 +17,8 @@ class Adapter : RecyclerView.Adapter<Adapter.LIstViewHolder>(){
 
     inner class LIstViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun populateModel(user: User){
-            itemView.tvView.text = user.username
+            itemView.Name.text == user.username
+            itemView.score.text == user.score.toString()
         }
     }
 
